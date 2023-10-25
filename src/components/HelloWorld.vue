@@ -29,28 +29,34 @@ const messaging = getMessaging(app);
 
 // Get registration token. Initially this makes a network call, once retrieved
 // subsequent calls to getToken will return from cache.
-getToken(messaging, {vapidKey: "BGQV9f_acJiZ32u7coDXbuUhpIRvYDDWE4hKcWR5-0q_A2POShUwDwiXfrbGRgckZw7YHqqaOLcMqcPOiU7akMY"})
-  .then((currentToken) => {
-    if (currentToken) {
-      // Send the token to your server and update the UI if necessary
-      console.log('Notification permission already granted.');
-      token.value = currentToken;
-    } else {
-      console.log('No registration token available. Request permission to generate one.');
-      return Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          console.log('Notification permission granted.');
-          token.value = currentToken;
-        } else {
-          console.log('Unable to get permission to notify.');
-        }
-      });
+navigator.serviceWorker.register('/pwa-base/firebase-messaging-sw.js').then(registration => {
+  getToken(messaging, {
+      vapidKey: "BGQV9f_acJiZ32u7coDXbuUhpIRvYDDWE4hKcWR5-0q_A2POShUwDwiXfrbGRgckZw7YHqqaOLcMqcPOiU7akMY",
+      serviceWorkerRegistration: registration
     }
-  })
-  .catch((err) => {
-    console.log('An error occurred while retrieving token. ', err);
-    // ...
-  });
+  )
+    .then((currentToken) => {
+      if (currentToken) {
+        // Send the token to your server and update the UI if necessary
+        console.log('Notification permission already granted.');
+        token.value = currentToken;
+      } else {
+        console.log('No registration token available. Request permission to generate one.');
+        return Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            console.log('Notification permission granted.');
+            token.value = currentToken;
+          } else {
+            console.log('Unable to get permission to notify.');
+          }
+        });
+      }
+    })
+    .catch((err) => {
+      console.log('An error occurred while retrieving token. ', err);
+      // ...
+    });
+});
 </script>
 
 <template>

@@ -1,5 +1,10 @@
 importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js');
+import { precacheAndRoute } from 'workbox-precaching';
+
+self.__WB_MANIFEST = [].concat(self.__WB_MANIFEST || []);
+
+precacheAndRoute(self.__WB_MANIFEST);
 
 firebase.initializeApp({
   apiKey: "AIzaSyBzn5R-pwBBJleWoXGRoNyARZPWsnc_hdE",
